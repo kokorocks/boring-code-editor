@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="https://images.app.goo.gl/Yx6qnGD1ogDopcTd6" type="image/url" sizes="16x16">
+    <meta property="og:image" content="https://images.app.goo.gl/s32ZEp4D4d2pTw476">
+    <meta property="twitter:image" content="https://images.app.goo.gl/s32ZEp4D4d2pTw476">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.13.4/codemirror.css'>
+    <title>Dynamic VSCode-like Editor</title>
+    <style>
+        #editable:focus {
+          outline: none;
+          box-shadow: none;
+          background-color: transparent; /* Optional, depending on your needs */
+        }
+
+        #commandprompt{
+            border: #333 solid;
+            height: 50%;
+            width: 95%;
+            font-size: x-small;
+            overflow-y: auto;
+        }
+        body {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+        }
+
+        #editable{
+            font-size: x-small;
+            border: hidden;
+            background-color: #1e1e1e;
+            width: 93%;
+            color: #3389cf;
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 99%;
+            border: 1px solid #333;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 5px;
+            color: #dcdcdc;
+        }
+
+        .editor-title {
+            font-size: 14px;
+        }
+
+        .editor-controls {
+            display: flex;
+        }
+
+        .control-button {
+            width: 12px;
+            height: 12px;
+            margin: 0 2px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .control-button.close {
+            background-color: #f00;
+        }
+
+        .control-button.minimize {
+            background-color: #ff0;
+        }
+
+        .control-button.maximize {
+            background-color: #0f0;
+        }
+
+        .editor-tabs {
+            display: flex;
+            background-color: #252526;
+            padding: 5px;
+            border-bottom: 1px solid #333;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 5px 10px;
+            margin-right: 5px;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab.active {
+            background-color: #333;
+        }
+
+        .editor {
+            flex: 1;
+            background-color: #1e1e1e;
+            overflow: auto;
+        }
+
+        .editor-content {
+            padding: 10px;
+        }
+        .middle{text-align: center;font-size: xx-small;}
+        pre {
+            margin: 0;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #1e1e1e; /* Ensure the background color matches */
+            color: #dcdcdc; /* Ensure text color matches */
+            outline: none; /* Remove outline on focus */
+        }
+
+        pre[contenteditable="true"]:focus {
+            background-color: #333; /* Change background color on focus */
+        }
+
+        /* Syntax highlighting styles */
+        .keyword { color: #569cd6; }
+        .tag { color: #569cd6; }
+        .attribute { color: #9cdcfe; }
+        .value { color: #d69d85; }
+        .comment { color: #6a9955; }
+        label{ color:#0f0;}
+
+    </style>
+</head>
+<body>
+    <div class="editor-container"><label for=""><input type="file" name="" id="change_check"><button id="help">ai code help</button><button id="downloadBtn">download your code?</button>
+        <div class="editor-header">
+            <div class="editor-title">index.html</div>
+            <div class="editor-controls">
+            </div>
+        </div>
+        <div class="editor-tabs" id="editor-tabs">
+            <!-- Initial tab will be added dynamically -->
+        </div>
+        <div class="editor">
+            <div class="editor-content" id="editor-content">
+                <!-- Placeholder content to simulate code -->
+                <pre contenteditable="true"><code class="html" id="code">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1 class="keyword"&gt;Hello, World!&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div><br><hr><div class="middle">powered by pycommandrunnner.exe</div>        
+            <div id="commandprompt"><label>ho4k3$: <input type="text" name="" id="editable" class="0"></label></div>
+            <script>document.getElementById('help').onclick = function(){
+                confirm('i suggest you just erase the code because it is actual junk, do you want me to de3lete it?')
+                document.getElementById('code').innerHTML=''
+            }
+            document.getElementById('downloadBtn').addEventListener('click', () => {
+                    // Define the content of the file
+                    const textContent = generate_code();
+                    
+                    // Create a Blob object with the text content
+                    const blob = new Blob([textContent], { type: 'html' });
+                    
+                    // Create an object URL for the Blob
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Create an anchor element and trigger the download
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'example.html';
+                    document.body.appendChild(a); // Append anchor to body (required for Firefox)
+                    a.click();
+                    document.body.removeChild(a); // Remove anchor from body
+                    
+                    // Revoke the object URL to free up memory
+                    URL.revokeObjectURL(url);
+                });
+            let code = '<!DOCTYPE html>'
+                function generate_code(){
+                    const commonWebsiteWords = [
+                        "home", "about", "contact", "services", "products", "blog", "news", "shop",
+                        "profile", "login", "register", "help", "faq", "terms", "privacy", "search",
+                        "welcome", "portfolio", "gallery", "events", "testimonials", "careers", "donate",
+                        "subscribe", "newsletter", "location", "map", "support", "download", "read",
+                        "view", "shop", "cart", "checkout", "order", "payment", "refund", "rating",
+                        "review", "service", "solution", "team", "company", "business", "features",
+                        "offers", "discount", "promotion", "event", "schedule", "blog", "article",
+                        "post", "update", "news", "announcement", "contact", "message", "phone",
+                        "email", "address", "hours", "profile", "settings", "preferences", "history",
+                        "feedback", "share", "follow", "social", "link", "media", "video", "audio",
+                        "image", "gallery", "design", "custom", "template", "layout", "content",
+                        "download", "upload", "file", "document", "resource", "tools", "guide",
+                        "tutorial", "manual", "support", "chat", "forum", "community", "membership",
+                        "subscribe", "signup", "login", "logout", "welcome", "start", "continue"
+                    ];
+                    const htmlTags = ['<html>', '<head>', '<title>', '<body>','<meta>', '<link>', '<script>', '<style>','<h1>', '<h2>', '<h3>', '<h4>', '<h5>', '<h6>','<p>', '<br>', '<hr>', '<strong>', '<em>', '<b>', '<i>', '<mark>', '<small>', '<del>', '<ins>','<ul>', '<ol>', '<li>','<a>','<img>','<table>', '<tr>', '<td>', '<th>', '<thead>', '<tbody>', '<tfoot>', '<caption>','<form>', '<input>', '<textarea>', '<button>', '<select>', '<option>', '<label>','<div>', '<span>', '<header>', '<footer>', '<section>', '<article>', '<aside>', '<nav>','<iframe>', '<embed>', '<object>', '<param>','<noscript>', '<canvas>', '<svg>', '<math>', '<details>', '<summary>'];
+                    for(let _=0;_<=Math.floor(Math.random()*999);_++){
+                        code = code + htmlTags[Math.floor(Math.random()*htmlTags.length)]+commonWebsiteWords[[Math.floor(Math.random()*htmlTags.length)]]
+                    }console.log(code);return code}
+                    
+                document.getElementById('change_check').onchange = function(){
+                    document.getElementById('code').innerText = generate_code()
+                }
+                let installin = ["installing pypykoko at users",`installing ${Math.floor(Math.random(1,100))} packages`,"adding all instances","adding current version",`deleting file number ${Math.floor(Math.random(1,12))} at once`,"downloading all data including gitfile29.json","installing at users/computer/files/programs/commands-storage/curdatasets all data sets are stored in this local file",`installing version ${Math.floor(Math.random(0,99))}.${Math.floor(Math.random(0,99))}.${Math.floor(Math.random(0,99))}`,"WARNING: installing in different directory that can create some problems, to fix this create a different directory with the name --command-ctrl-go with the ._install_ file extension","adding all data from gitlife-com.json","installing all xml statuses, will not work with .xml1-.xml999, use the extension .xml0.0-.xml0.99","installing u-r-old.txt with readme.md","deleting all files in users including win32 and more","downloading virus.exe","adding all .exe","replacing all .7z files","buying all fishing boats for fun","WARNING: uses wergle servers that do not support .py .json .js .php .c .cc .html and more","doing something important","installing AIs in current desktop",`windows and mac and linux install all instances and data strustures from model.${Math.floor(Math.random(0,9))}zh password protected`,"data breach protection added from AES datafeilds and .py and .json extensions, please read instructions inside of README.md",`install cookies from site number=${Math.floor(Math.random(111,999))}`]
+                let y=0
+                let all=0
+                let count = 0
+                async function wait_until() {
+                    while(all != y){}
+                    document.getElementById('commandprompt').innerHTML = document.getElementById('commandprompt').innerHTML+`<label>ho4k3$: <input type="text" name="" id="editable" class=${count}></label>`;
+                }
+
+                function generate_stuffs(e){
+                    document.getElementById('commandprompt').innerHTML = document.getElementById('commandprompt').innerHTML+`<div style='color: lightblue;'>installing ${e}</div>`
+                    for(let y=0;y<=Math.floor(Math.random()*100+1);y++){
+                        setTimeout(() => {
+                        for(let q=0;q<=Math.floor(Math.random()*3+1);q++){
+                            document.getElementById('commandprompt').innerHTML = document.getElementById('commandprompt').innerHTML+`<div style='color: lightblue;'>${installin[Math.floor(Math.random()*installin.length)]}</div>`;
+                        }all=+1}, Math.floor(Math.random()*7500*y));
+                    }
+
+                }
+
+
+                function run_command(e){
+                    if(e.includes('npm i')||e.includes('pip install')&&e.includes('npm install')){let new_response = e.replace('npm i','');new_response=e.replace('pip install','');new_response=e.replace('npm install','');
+                    generate_stuffs(new_response)
+
+                        //document.getElementById('commandprompt').innerHTML = `<label>ho4k3$: <input type="text" name="" id="editable"></label>`
+                    }else{document.getElementById('commandprompt').innerHTML = document.getElementById('commandprompt').innerHTML+"<div style='color: lightblue;'>no such command existeth here</div>";document.getElementById('commandprompt').innerHTML = document.getElementById('commandprompt').innerHTML+`<label>ho4k3$: <input type="text" name="" id="editable" class=${count}></label>`;}
+                }
+                document.getElementsByClassName(count)[0].addEventListener("keyup", (e) => {
+                    if (e.key === "Enter") {run_command(document.getElementsByClassName(count)[0].value.toLowerCase())}})
+            </script>
+
+
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const editorTabs = document.getElementById('editor-tabs');
+            const editorContent = document.getElementById('editor-content');
+            let tabCounter = 1;
+
+            // Function to create a new tab
+            function createTab(fileName) {
+                const tab = document.createElement('div');
+                tab.classList.add('tab');
+                tab.textContent = fileName;
+                tab.dataset.file = fileName;
+
+                tab.addEventListener('click', () => {
+                    activateTab(tab);
+                });
+
+                editorTabs.appendChild(tab);
+
+                // Activate the first tab if it's the only one
+                if (editorTabs.children.length === 1) {
+                    activateTab(tab);
+                }
+            }
+
+            // Function to activate a tab
+            function activateTab(tab) {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                updateEditorContent(tab.dataset.file);
+            }
+
+            // Function to update the editor content based on the file
+            function updateEditorContent(file) {
+                let content = '';
+                switch (file) {
+                    case 'index.html':
+                        content = '&lt;!DOCTYPE html&gt;\n&lt;html lang="en"&gt;\n  &lt;head&gt;\n    &lt;meta charset="UTF-8"&gt;\n    &lt;title&gt;My Page&lt;/title&gt;\n  &lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1 class="keyword"&gt;Hello, World!&lt;/h1&gt;\n  &lt;/body&gt;\n&lt;/html&gt;';
+                        break;
+                    case 'style.css':
+                        content = '/* This is a CSS file */\nbody {\n    background-color: #1e1e1e;\n    color: #dcdcdc;\n}';
+                        break;
+                    case 'script.js':
+                        content = '// This is a JavaScript file\nconsole.log("Hello, World!");';
+                        break;
+                    default:
+                        content = `// Content for ${file}`;
+                }
+                editorContent.innerHTML = `<pre contenteditable="true"><code class="html">${content}</code></pre>`;
+            }
+
+            // Function to handle adding new tabs
+            function addNewTab() {
+                const fileName = prompt('Enter file name with extension (e.g., file.txt):');
+                if (fileName) {
+                    createTab(fileName);
+                }
+            }
+
+            function runcode(){
+                let htmls = [document.getElementsByTagName('code')[0].textContent,'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sign up to run code</title><style>body {font-family: Arial, sans-serif; background: linear-gradient(to right, #00b4db, #0083b0); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;} .container {background: #ffffff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); width: 100%; max-width: 400px;} .header {text-align: center; margin-bottom: 1.5rem;} .header h1 {color: #333; font-size: 1.5rem; margin: 0;} .form-group {margin-bottom: 1rem;} .form-group label {display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: #555;} .form-group input {width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;} .form-group input:focus {border-color: #00b4db; outline: none;} .form-group .error {color: red; font-size: 0.8rem;} .form-group .success {color: green; font-size: 0.8rem;} .form-group button {width: 100%; padding: 0.75rem; border: none; border-radius: 4px; background-color: #00b4db; color: #ffffff; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;} .form-group button:hover {background-color: #0094c6;} .social-signup {display: flex; justify-content: space-between; margin: 1.5rem 0;} .social-signup a {display: inline-block; width: 48%; padding: 0.75rem; text-align: center; color: #ffffff; border-radius: 4px; text-decoration: none; font-size: 0.9rem;} .social-signup .google {background-color: #db4437;} .social-signup .facebook {background-color: #3b5998;} .footer {text-align: center; font-size: 0.8rem; color: #555;} .footer a {color: #00b4db; text-decoration: none;} .footer a:hover {text-decoration: underline;}</style></head><body><div class="container"><div class="header"><h1>sign up to run code</h1></div><form action="#"><div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" required></div><div class="form-group"><label for="password">Password</label><input type="password" id="password" name="password" required></div><div class="form-group"><label for="confirm-password">Confirm Password</label><input type="password" id="confirm-password" name="confirm-password" required></div><div class="form-group"><button type="submit">sign up to run code</button></div></form><div class="social-signup"><a href="#" class="google">sign up to run code with Google</a><a href="#" class="facebook">sign up to run code with Facebook</a></div><div class="footer"><p>Already have an account? <a href="#">Log In</a></p><p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p></div></div></body></html>','<h1>sorry, you were scammed, this editor does not actually work lolololololo hahahahahehehehehehahahaha</h1>','<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sign up to run code</title><style>body {font-family: Arial, sans-serif; background: linear-gradient(to right, #00b4db, #0083b0); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;} .container {background: #ffffff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); width: 100%; max-width: 400px;} .header {text-align: center; margin-bottom: 1.5rem;} .header h1 {color: #333; font-size: 1.5rem; margin: 0;} .form-group {margin-bottom: 1rem;} .form-group label {display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: #555;} .form-group input {width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;} .form-group input:focus {border-color: #00b4db; outline: none;} .form-group .error {color: red; font-size: 0.8rem;} .form-group .success {color: green; font-size: 0.8rem;} .form-group button {width: 100%; padding: 0.75rem; border: none; border-radius: 4px; background-color: #00b4db; color: #ffffff; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;} .form-group button:hover {background-color: #0094c6;} .social-signup {display: flex; justify-content: space-between; margin: 1.5rem 0;} .social-signup a {display: inline-block; width: 48%; padding: 0.75rem; text-align: center; color: #ffffff; border-radius: 4px; text-decoration: none; font-size: 0.9rem;} .social-signup .google {background-color: #db4437;} .social-signup .facebook {background-color: #3b5998;} .footer {text-align: center; font-size: 0.8rem; color: #555;} .footer a {color: #00b4db; text-decoration: none;} .footer a:hover {text-decoration: underline;}</style></head><body><div class="container"><div class="header"><h1>sign up to run code</h1></div><form action="#"><div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" required></div><div class="form-group"><label for="password">Password</label><input type="password" id="password" name="password" required></div><div class="form-group"><label for="confirm-password">Confirm Password</label><input type="password" id="confirm-password" name="confirm-password" required></div><div class="form-group"><button type="submit">sign up to run code</button></div></form><div class="social-signup"><a href="#" class="google">sign up to run code with Google</a><a href="#" class="facebook">sign up to run code with Facebook</a></div><div class="footer"><p>Already have an account? <a href="#">Log In</a></p><p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p></div></div></body></html>','<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sign up to run code</title><style>body {font-family: Arial, sans-serif; background: linear-gradient(to right, #00b4db, #0083b0); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;} .container {background: #ffffff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); width: 100%; max-width: 400px;} .header {text-align: center; margin-bottom: 1.5rem;} .header h1 {color: #333; font-size: 1.5rem; margin: 0;} .form-group {margin-bottom: 1rem;} .form-group label {display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: #555;} .form-group input {width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;} .form-group input:focus {border-color: #00b4db; outline: none;} .form-group .error {color: red; font-size: 0.8rem;} .form-group .success {color: green; font-size: 0.8rem;} .form-group button {width: 100%; padding: 0.75rem; border: none; border-radius: 4px; background-color: #00b4db; color: #ffffff; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;} .form-group button:hover {background-color: #0094c6;} .social-signup {display: flex; justify-content: space-between; margin: 1.5rem 0;} .social-signup a {display: inline-block; width: 48%; padding: 0.75rem; text-align: center; color: #ffffff; border-radius: 4px; text-decoration: none; font-size: 0.9rem;} .social-signup .google {background-color: #db4437;} .social-signup .facebook {background-color: #3b5998;} .footer {text-align: center; font-size: 0.8rem; color: #555;} .footer a {color: #00b4db; text-decoration: none;} .footer a:hover {text-decoration: underline;}</style></head><body><div class="container"><div class="header"><h1>sign up to run code</h1></div><form action="#"><div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" required></div><div class="form-group"><label for="password">Password</label><input type="password" id="password" name="password" required></div><div class="form-group"><label for="confirm-password">Confirm Password</label><input type="password" id="confirm-password" name="confirm-password" required></div><div class="form-group"><button type="submit">sign up to run code</button></div></form><div class="social-signup"><a href="#" class="google">sign up to run code with Google</a><a href="#" class="facebook">sign up to run code with Facebook</a></div><div class="footer"><p>Already have an account? <a href="#">Log In</a></p><p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p></div></div></body></html>']
+                document.write(htmls[Math.floor(Math.random()*htmls.length)])
+            }
+
+            // Create initial tab
+            createTab('index.html');
+
+            // Add a button to create new tabs
+            const addTabButton = document.createElement('button');
+            addTabButton.textContent = 'Add Tab';
+            addTabButton.style.position = 'fixed';
+            addTabButton.style.top = '10px';
+            addTabButton.style.right = '10px';
+            addTabButton.style.padding = '5px 10px';
+            addTabButton.style.backgroundColor = '#007acc';
+            addTabButton.style.color = '#fff';
+            addTabButton.style.border = 'none';
+            addTabButton.style.borderRadius = '3px';
+            addTabButton.style.cursor = 'pointer';
+
+            addTabButton.addEventListener('click', addNewTab);
+            const addrunbutton = document.createElement('button');
+            addrunbutton.textContent = 'Run code';
+            addrunbutton.style.position = 'fixed';
+            addrunbutton.style.top = '10px';
+            addrunbutton.style.right = '100px';
+            addrunbutton.style.padding = '5px 10px';
+            addrunbutton.style.backgroundColor = '#007acc';
+            addrunbutton.style.color = '#fff';
+            addrunbutton.style.border = 'none';
+            addrunbutton.style.borderRadius = '3px';
+            addrunbutton.style.cursor = 'pointer';
+
+            addrunbutton.addEventListener('click', runcode);
+
+            document.body.appendChild(addrunbutton);
+            document.body.appendChild(addTabButton);
+        });
+    </script>
+    
+</html>
