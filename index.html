@@ -144,7 +144,7 @@
         .value { color: #d69d85;font-family: 'Jokerman', fantasy !important; }
         .comment { color: #6a9955;font-family: 'Jokerman', fantasy !important; }
         label{ color:#0f0;font-family: 'Jokerman', fantasy;}
-
+        .green{color:lightgreen !important;}
     </style>
 </head>
 <body>
@@ -229,7 +229,7 @@
                 let count = 0
                 async function wait_until() {
                     while(all != y){}
-                    document.getElementById('commandprompt').innerHTML = document.getElementById('commandprompt').innerHTML+`<label>ho4k3$: <input type="text" name="" id="editable" class=${count}></label>`;
+                    document.getElementById('commandprompt').innerHTML = document.getElementById('commandprompt').innerHTML+`<label class='green'>ho4k3$: <input type="text" name="" id="editable" class=${count}></label>`;
                 }
 
                 function generate_stuffs(e){
