@@ -5,31 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>your new favorite code editor</title>
     <style>
-        code{font-family: 'Jokerman', fantasy !important;}
+        code{font-family: 'Jokerman', fantasy !important;cursor: url('cursor1.png') 2 2;}
         #editable:focus {
-          font-family: 'Mistral', cursive !important;
+          font-family: 'Mistral', cursive !important;cursor: url('cursor1.png') 2 2;
           outline: none;
           box-shadow: none;
           background-color: transparent; /* Optional, depending on your needs */
         }
 
         #commandprompt{
-            font-family: 'Mistral', cursive !important;
+            font-family: 'Mistral', cursive !important;cursor: url('cursor1.png') 2 2;
             border: #333 solid;
             height: 50%;
             width: 95%;
             font-size: x-small;
             overflow-y: auto;
         }
-        #code{font-family: 'Jokerman', fantasy !important;}
+        #code{font-family: 'Jokerman', fantasy !important;cursor: url('cursor1.png') 2 2;}
         body {
             margin: 0;
             background-color: #1e1e1e;
             color: #dcdcdc;
         }
 
-        #editable{font-family: 'Mistral', cursive !important;
-            font-size: x-small;
+        #editable{font-family: 'Mistral', cursive !important;cursor: url('cursor1.png') 2 2;
             border: hidden;
             background-color: #1e1e1e;
             width: 93%;
@@ -37,7 +36,7 @@
         }
 
         .editor-container {
-            font-family: 'Old English Text MT', serif !important;
+            font-family: 'Old English Text MT', serif !important;cursor: url('cursor2.png') 2 2;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -46,7 +45,7 @@
         }
 
         .editor-header {
-            font-family: 'Old English Text MT', serif !important;
+            font-family: 'Old English Text MT', serif !important;cursor: url('cursor2.png') 2 2;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -55,16 +54,16 @@
             color: #dcdcdc;
         }
 
-        .editor-title {font-family: 'Jokerman', fantasy !important;
+        .editor-title {font-family: 'Jokerman', fantasy !important;cursor: url('cursor2.png') 2 2;
             font-size: 14px;
         }
 
-        .editor-controls {font-family: 'Jokerman', fantasy !important;
+        .editor-controls {font-family: 'Jokerman', fantasy !important;cursor: url('cursor2.png') 2 2;
             display: flex;
         }
 
         .control-button {
-            font-family: 'Old English Text MT', serif !important;
+            font-family: 'Old English Text MT', serif !important;cursor: url('cursor2.png') 2 2;
             width: 12px;
             height: 12px;
             margin: 0 2px;
@@ -76,20 +75,20 @@
             font-size: 10px;
         }
 
-        .control-button.close {font-family: 'Old English Text MT', serif !important;
+        .control-button.close {font-family: 'Old English Text MT', serif !important;cursor: url('cursor2.png') 2 2;
             background-color: #f00;
         }
 
-        .control-button.minimize {font-family: 'Old English Text MT', serif !important;
+        .control-button.minimize {font-family: 'Old English Text MT', serif !important;cursor: url('cursor2.png') 2 2;
             background-color: #ff0;
         }
 
-        .control-button.maximize {font-family: 'Old English Text MT', serif !important;
+        .control-button.maximize {font-family: 'Old English Text MT', serif !important;cursor: url('cursor2.png') 2 2;
             background-color: #0f0;
         }
 
         .editor-tabs {
-            font-family: 'Old English Text MT', serif !important;
+            font-family: 'Old English Text MT', serif !important;cursor: grabbing;
             display: flex;
             background-color: #252526;
             padding: 5px;
@@ -97,7 +96,7 @@
             overflow-x: auto;
         }
 
-        .tab {font-family: 'Jokerman', fantasy !important;
+        .tab {font-family: 'Jokerman', fantasy !important;cursor: all-scroll;
             padding: 5px 10px;
             margin-right: 5px;
             background-color: #1e1e1e;
@@ -110,22 +109,22 @@
             text-overflow: ellipsis;
         }
 
-        .tab.active {font-family: 'Jokerman', fantasy !important;
+        .tab.active {font-family: 'Jokerman', fantasy !important;cursor: not-allowed;
             background-color: #333;
         }
 
-        .editor {font-family: 'Jokerman', fantasy !important;
+        .editor {font-family: 'Jokerman', fantasy !important;cursor: not-allowed;
             flex: 1;
             background-color: #1e1e1e;
             overflow: auto;
         }
 
-        .editor-content {font-family: 'Jokerman', fantasy !important;
+        .editor-content {font-family: 'Jokerman', fantasy !important;cursor: not-allowed;
             padding: 10px;
         }
-        .middle{text-align: center;font-size: xx-small;}
+        .middle{text-align: center;font-size: xx-small;cursor: not-allowed;}
         pre {
-            font-family: 'Jokerman', fantasy !important;
+            font-family: 'Jokerman', fantasy !important;cursor: not-allowed;
             margin: 0;
             font-size: 14px;
             white-space: pre-wrap;
@@ -134,9 +133,9 @@
             color: #dcdcdc; /* Ensure text color matches */
             outline: none; /* Remove outline on focus */
         }
-        .html{font-family: 'Jokerman', fantasy !important;}
+        .html{font-family: 'Jokerman', fantasy !important;cursor: not-allowed;}
         pre[contenteditable="true"]:focus {
-            background-color: #333;font-family: 'Jokerman', fantasy !important;
+            background-color: #333;font-family: 'Jokerman', fantasy !important;}
         /* Syntax highlighting styles */
         .keyword { color: #569cd6;font-family: 'Jokerman', fantasy !important; }
         .tag { color: #569cd6;font-family: 'Jokerman', fantasy !important; }
