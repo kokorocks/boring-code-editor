@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic VSCode-like Editor</title>
+    <title>your new favorite code editor</title>
     <style>
-        div{font-family: 'Jokerman', fantasy !important;}
+        code{font-family: 'Jokerman', fantasy !important;}
         #editable:focus {
-          font-family: 'Mistral', cursive;
+          font-family: 'Mistral', cursive !important;
           outline: none;
           box-shadow: none;
           background-color: transparent; /* Optional, depending on your needs */
         }
 
         #commandprompt{
-            font-family: 'Mistral', cursive;
+            font-family: 'Mistral', cursive !important;
             border: #333 solid;
             height: 50%;
             width: 95%;
@@ -22,13 +22,13 @@
             overflow-y: auto;
         }
         #code{font-family: 'Jokerman', fantasy !important;}
-        body {font-family: 'Jokerman', fantasy;
+        body {font-family: 'Jokerman', fantasy !important;
             margin: 0;
             background-color: #1e1e1e;
             color: #dcdcdc;
         }
 
-        #editable{font-family: 'Jokerman', fantasy;
+        #editable{font-family: 'Jokerman', fantasy !important;
             font-size: x-small;
             border: hidden;
             background-color: #1e1e1e;
@@ -37,7 +37,7 @@
         }
 
         .editor-container {
-            font-family: 'Old English Text MT', serif;
+            font-family: 'Old English Text MT', serif !important;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -46,7 +46,7 @@
         }
 
         .editor-header {
-            font-family: 'Old English Text MT', serif;
+            font-family: 'Old English Text MT', serif !important;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -55,16 +55,16 @@
             color: #dcdcdc;
         }
 
-        .editor-title {font-family: 'Jokerman', fantasy;
+        .editor-title {font-family: 'Jokerman', fantasy !important;
             font-size: 14px;
         }
 
-        .editor-controls {font-family: 'Jokerman', fantasy;
+        .editor-controls {font-family: 'Jokerman', fantasy !important;
             display: flex;
         }
 
         .control-button {
-            font-family: 'Old English Text MT', serif;
+            font-family: 'Old English Text MT', serif !important;
             width: 12px;
             height: 12px;
             margin: 0 2px;
@@ -76,20 +76,20 @@
             font-size: 10px;
         }
 
-        .control-button.close {font-family: 'Jokerman', fantasy;
+        .control-button.close {font-family: 'Jokerman', fantasy !important;
             background-color: #f00;
         }
 
-        .control-button.minimize {font-family: 'Jokerman', fantasy;
+        .control-button.minimize {font-family: 'Jokerman', fantasy !important;
             background-color: #ff0;
         }
 
-        .control-button.maximize {font-family: 'Jokerman', fantasy;
+        .control-button.maximize {font-family: 'Jokerman', fantasy !important;
             background-color: #0f0;
         }
 
         .editor-tabs {
-            font-family: 'Jokerman', fantasy;
+            font-family: 'Jokerman', fantasy !important;
             display: flex;
             background-color: #252526;
             padding: 5px;
@@ -97,7 +97,7 @@
             overflow-x: auto;
         }
 
-        .tab {font-family: 'Jokerman', fantasy;
+        .tab {font-family: 'Jokerman', fantasy !important;
             padding: 5px 10px;
             margin-right: 5px;
             background-color: #1e1e1e;
@@ -110,22 +110,22 @@
             text-overflow: ellipsis;
         }
 
-        .tab.active {font-family: 'Jokerman', fantasy;
+        .tab.active {font-family: 'Jokerman', fantasy !important;
             background-color: #333;
         }
 
-        .editor {font-family: 'Jokerman', fantasy;
+        .editor {font-family: 'Jokerman', fantasy !important;
             flex: 1;
             background-color: #1e1e1e;
             overflow: auto;
         }
 
-        .editor-content {font-family: 'Jokerman', fantasy;
+        .editor-content {font-family: 'Jokerman', fantasy !important;
             padding: 10px;
         }
         .middle{text-align: center;font-size: xx-small;}
         pre {
-            font-family: 'Jokerman', fantasy;
+            font-family: 'Jokerman', fantasy !important;
             margin: 0;
             font-size: 14px;
             white-space: pre-wrap;
@@ -134,15 +134,15 @@
             color: #dcdcdc; /* Ensure text color matches */
             outline: none; /* Remove outline on focus */
         }
-
+        .html{font-family: 'Jokerman', fantasy !important;}
         pre[contenteditable="true"]:focus {
-            background-color: #333;font-family: 'Jokerman', fantasy;
+            background-color: #333;font-family: 'Jokerman', fantasy !important;
         /* Syntax highlighting styles */
-        .keyword { color: #569cd6;font-family: 'Jokerman', fantasy; }
-        .tag { color: #569cd6;font-family: 'Jokerman', fantasy; }
-        .attribute { color: #9cdcfe;font-family: 'Jokerman', fantasy; }
-        .value { color: #d69d85;font-family: 'Jokerman', fantasy; }
-        .comment { color: #6a9955;font-family: 'Jokerman', fantasy; }
+        .keyword { color: #569cd6;font-family: 'Jokerman', fantasy !important; }
+        .tag { color: #569cd6;font-family: 'Jokerman', fantasy !important; }
+        .attribute { color: #9cdcfe;font-family: 'Jokerman', fantasy !important; }
+        .value { color: #d69d85;font-family: 'Jokerman', fantasy !important; }
+        .comment { color: #6a9955;font-family: 'Jokerman', fantasy !important; }
         label{ color:#0f0;font-family: 'Jokerman', fantasy;}
 
     </style>
